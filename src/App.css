@@ -1,8 +1,14 @@
 .inp{
-  width: 5%
+  width: 12%
 }
 
 body{
  background-color: #E7EBF0;;
 
+}
+.card {
+  margin: 0px auto; /* Added */
+  float: none; /* Added */
+  margin-bottom: 0px; /* Added */
+  padding: 10px;
 }

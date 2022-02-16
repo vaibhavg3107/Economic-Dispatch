@@ -1,12 +1,24 @@
 import React from 'react'
-import NValue from './NValue.jsx'
 import GeneratingStationData from './GeneratingStationData';
 import Button from '@mui/material/Button';
 import Output from './Output';
 import { useState } from 'react';
 import axios from "axios"
-const Data = { "a": [], "b": [], "c": [], "pmax": [], "pmin": [] };
+let Data = { "a": [], "b": [], "c": [], "pmax": [], "pmin": [] };
+
 export default function WithoutLosses() {
+
+  const [outputData, setOutputData] = useState({
+    P : "[1, 2, 3]",
+    C : "[10, 20, 30]",
+    Total_Cost : "60"
+  } )
+
+  const [n, setN] = useState();
+  const [Pd, setPd] = useState();
+  const [ListArray, setListArray] = useState([]);
+  const [outputDisplay, setOutputDisplay] = useState(false);
+  const [calculateButton, setCalculateButton] = useState(false);
 
   function calculateWithoutLosses() {
 
@@ -19,88 +31,75 @@ export default function WithoutLosses() {
     "PD" : Pd }
 
     console.log(payload)
-
-    axios.post('/api', payload).then((resp) => { console.log(resp.data) }).catch(e=>console.log(e))
-
-
+    axios.post('/api', payload).then((resp) => { 
+      setOutputData(resp.data); 
+      setOutputDisplay(true);
+    }).catch(e=>console.log(e))
   }
-
-
-
-
-  const [n, setN] = useState(0);
-  const [Pd, setPd] = useState(0);
-  const [ListArray, setListArray] = useState([]);
-
-
 
   function handleChangeN(event) {
-    console.log("dd")
-
     setN(parseInt(event.target.value));
   }
-
 
   function handleChangePd(event) {
     setPd(parseInt(event.target.value));
   }
 
-
   function handleClickN() {
-
-    console.log("jwriwjop")
     setListArray([]);
-
-
-    var newArray = [];
-    for (var i = 0; i < n; i++) {
-
+    var sz = Data['a'].length;
+    var newArray = Array.from(Array(sz).keys());
+    for (var i = sz; i < n; i++) {
       newArray.push(i);
       Data["a"].push(0);
       Data["b"].push(0);
       Data["c"].push(0);
       Data["pmax"].push(0);
       Data["pmin"].push(0);
+    }
 
+    for (var i = sz; i > n; i--){
+      newArray.pop();
+      Data["a"].pop();
+      Data["b"].pop();
+      Data["c"].pop();
+      Data["pmax"].pop();
+      Data["pmin"].pop();
     }
 
     setListArray(newArray);
-    console.log(Data)
+    //console.log(Data);
+    setCalculateButton(true);
+    setOutputDisplay(false);
   }
+
+  
   function handleClickData() {
-    console.log(Data)
-    calculateWithoutLosses()
+    calculateWithoutLosses();
   }
 
   function handleChangeData(type, val, ind) {
-
-    console.log(val);
     Data[type][ind] = val;
-    console.log(Data);
   }
 
-
-
-
   return (
-    <div>
-      <form>
-        <div>
-          <label>Enter the number of power generating stations : </label>
-          <input type="int" onChange={handleChangeN} className='mx-2 inp' value={n} />
-        </div>
-        <div>
-          <label>Total Power Demand (in MW) : </label>
-          <input type="int" value={Pd} onChange={handleChangePd} className='mx-2 inp' value={Pd} />
-        </div>
-        <Button variant="contained" onClick={handleClickN}>Submit</Button>
-
-
-      </form>
-      {ListArray.map((i) => <GeneratingStationData num={i + 1} updateData={handleChangeData} />)}
-
-      <Button onClick={handleClickData} > Calculate</Button>
-      <Output />
+    <div className="text-center">
+      <div className="card" style={{width:"500px"}}>
+        <form>
+          <p>
+            <label>Enter the number of power generating stations : </label>
+            <input type="number" onChange={handleChangeN} className='mx-2 inp' value={n} />
+          </p>
+          <p>
+            <label>Total Power Demand (in MW) : </label>
+            <input type="number" onChange={handleChangePd} className='mx-2 inp' value={Pd} />
+          </p>
+          <Button variant="contained" onClick={handleClickN}>Submit</Button>
+        </form>
+      </div>
+      {ListArray.map((i) => <GeneratingStationData key={i} num={i + 1} updateData={handleChangeData} />)}
+      {calculateButton && <Button onClick={handleClickData} > Calculate</Button>}
+      {outputDisplay && <Output result={outputData} />}
     </div>
   )
 }

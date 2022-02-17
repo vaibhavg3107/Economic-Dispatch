@@ -7,10 +7,12 @@ export default function Output(props) {
   let Total_Cost = props.result.Total_Cost;
 
   return (
-    <div>
-      <p>The optimal solution for minimum cost is : </p>
+    
+    <div style={{backgroundColor:"white",margin:"10px 50px 50px 30px",borderRadius:"10px",textAlign:"start",padding:"15px"}}>
+      <h5>The optimal solution for minimum cost is : </h5>
       {P.map((value, index) => <GeneratingStationOutput key = {index} idx = {index} P = {value} C = {C[index]} />)}
       <p>Total Generation Cost is Rs. {Total_Cost}. </p>
     </div>
+    
   )
 }

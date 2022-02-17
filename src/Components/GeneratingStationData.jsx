@@ -32,8 +32,10 @@ export default function GeneratingStationData(props) {
 
      
 
+
   return (
-    <div className="card text-center" style={{width:"500px"}}>
+    <>
+    <div className="card text-center" style={{width:"500px" ,marginTop:"7px",boxShadow: "1px 2px 1px #9E9E9E" }}>
       <div className="card-body" >
     
         <p>
@@ -59,5 +61,6 @@ export default function GeneratingStationData(props) {
         </div>
       </div>
     </div>
+  </>
   )
 }

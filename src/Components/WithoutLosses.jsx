@@ -3,6 +3,7 @@ import GeneratingStationData from './GeneratingStationData';
 import Button from '@mui/material/Button';
 import Output from './Output';
 import { useState } from 'react';
+import { Typography } from '@mui/material';
 import axios from "axios"
 let Data = { "a": [], "b": [], "c": [], "pmax": [], "pmin": [] };
 
@@ -32,6 +33,7 @@ export default function WithoutLosses() {
 
     console.log(payload)
     axios.post('/api', payload).then((resp) => { 
+      console.log(resp.data);
       setOutputData(resp.data); 
       setOutputDisplay(true);
     }).catch(e=>console.log(e))
@@ -83,22 +85,26 @@ export default function WithoutLosses() {
   }
 
   return (
-    <div className="text-center">
-      <div className="card" style={{width:"500px"}}>
+    <div id="calculate" className="text-center">
+      
+      <h1 > Calculations</h1>
+      <div className="card" style={{width:"500px",boxShadow: "1px 2px 1px #9E9E9E",marginTop:"10px",borderRadius:"7px",padding:"18px 20px"}}>
+        
+       
         <form>
-          <p>
+          <p style={{textAlign:"start"}}>
             <label>Enter the number of power generating stations : </label>
             <input type="number" onChange={handleChangeN} className='mx-2 inp' value={n} />
           </p>
-          <p>
+          <p style={{textAlign:"start"}}>
             <label>Total Power Demand (in MW) : </label>
             <input type="number" onChange={handleChangePd} className='mx-2 inp' value={Pd} />
           </p>
-          <Button variant="contained" onClick={handleClickN}>Submit</Button>
+          <Button  variant="contained"  style={{backgroundColor:"#000000"}} onClick={handleClickN}>Submit</Button>
         </form>
       </div>
       {ListArray.map((i) => <GeneratingStationData key={i} num={i + 1} updateData={handleChangeData} />)}
-      {calculateButton && <Button onClick={handleClickData} > Calculate</Button>}
+      {calculateButton && <Button variant="contained" size="large" style={{backgroundColor:"#000000",marginTop:"10px"}}  onClick={handleClickData} > Calculate</Button>}
       {outputDisplay && <Output result={outputData} />}
     </div>
   )

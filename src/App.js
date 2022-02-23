@@ -20,7 +20,7 @@ function App() {
       <Introduction />
       <WithoutLosses />
       <div id="team">
-      <h>Team</h>
+      <h></h>
       </div>
     </>
 

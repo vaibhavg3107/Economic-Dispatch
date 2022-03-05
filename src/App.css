@@ -1,10 +1,13 @@
-.inp{
-  width: 12%
+.inp {
+  width: 12%;
 }
 
-body{
- background-color: #E7EBF0;;
-
+body {
+  background-color: #e7ebf0;
+}
+.bg {
+  background-color: #e7ebf0;
+  padding: 20px;
 }
 .card {
   margin: 0px auto; /* Added */
@@ -12,4 +15,3 @@ body{
   margin-bottom: 0px; /* Added */
   padding: 10px;
 }
-

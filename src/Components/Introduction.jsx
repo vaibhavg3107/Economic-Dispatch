@@ -1,24 +1,63 @@
-import { Typography } from '@mui/material';
-import React from 'react'
-import './Introduction.css'
+import { Typography } from "@mui/material";
+import React from "react";
+import "./Introduction.css";
 
 function Introduction() {
-    return (
-        <>
-        <div id="intro" style={{padding:"10px 15px "}}>
-            <h1>Introduction</h1>
-            
-            <p>
-            The objective of the electric utility or grid operator on an hour-to-hour basis is to minimize the total generation cost of meeting electricity demand. Economic Dispatch is the procedure by which the utility selects which of its generators it will use to meet electricity demand. You can think about economic dispatch like clearing the electricity market, as follows:
-                <li>The utility constructs a marginal cost (supply) curve for its entire system.</li>
-                <li>Demand is often assumed to be price-inelastic (vertical demand curve).</li>
-                <li>The marginal cost of generation at the market-clearing point (supply = demand) is called the "System Lambda."</li>
-                <li>The generator whose output serves the marginal kWh of electricity demand is called the "marginal unit."</li>
-            </p>
-
-            </div>
-        </>
-    );
+  return (
+    <div className="card bg">
+      <div id="intro" style={{ padding: "10px 15px " }}>
+        <h1 className="text-center">Introduction</h1>
+        <p>
+          Economic Dispatch, or Economic Load Dispatch Problem is an intricate
+          problem in the field of Power Electronics. By definition, it deals
+          with process by which the utility (grid operator) selects which of its
+          generators it will use to meet the given/required electricity demand
+          in the most optimal way.
+        </p>
+        <p>
+          To understand this problem, simply speaking, let us see:
+          <ul>
+            <li>
+              {" "}
+              'The idea is to minimize the cost of electricity generation'
+              without sacrificing quality and reliability.{" "}
+            </li>
+            <li>
+              {" "}
+              Therefore, the production cost is minimized by operating plants
+              economically.
+            </li>
+            <li>
+              {" "}
+              Since the load demand varies, the power generation must vary
+              accordingly to maintain the power balance.
+            </li>
+            <li>
+              {" "}
+              The turbine-governor must be controlled such that the demand is
+              met economically.{" "}
+            </li>
+          </ul>
+        </p>
+        <p>
+          Thus multiple choices would arise, which leads to this problem turning
+          out to be nonlinear. To help optimize, an base algorithm is used to
+          help determine power from each generator, while the generators are
+          specified by the user (number of generators, minimum and maximum power
+          generation allowed from each unit) and the computational model based
+          on the algorithm returns the power generated from each unit, in the
+          optimized way. A couple of things to be kept in mind: the total power,
+          by virtue of setting limits upon each generator, should lie between
+          the summation of minimum and maximum allowed powers of all generators.
+        </p>
+        <p>
+          You can use the below given computational model created to optimize
+          power generation and find the minimized cost of power generation for
+          grid operation:
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default Introduction;

@@ -62,7 +62,7 @@ export default function Output(props) {
               </TableRow>
             ))}
             <TableRow>
-              <TableCell colSpan={6} align="center"><strong>Total Cost (RS.)</strong></TableCell>
+              <TableCell colSpan={6} align="center"><strong>Total Cost (RS./h)</strong></TableCell>
               <TableCell align="center"><strong>{Total_Cost.toFixed(2)}</strong></TableCell>
             </TableRow>
           </TableBody>

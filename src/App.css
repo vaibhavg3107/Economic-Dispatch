@@ -1,7 +1,9 @@
 .inp {
   width: 12%;
 }
-
+img {
+  width: 90%;
+}
 body {
   background-color: #e7ebf0;
 }

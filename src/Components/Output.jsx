@@ -35,7 +35,7 @@ export default function Output(props) {
         padding: "15px",
       }}
     >
-      <h5>The optimal solution for the minimum cost is : </h5>
+      <h5>The optimal solution for the given Economic Load Dispatch Problem is : </h5>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="spanning table">
           <TableHead>

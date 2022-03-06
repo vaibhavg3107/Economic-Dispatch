@@ -40,13 +40,13 @@ export default function Output(props) {
         <Table sx={{ minWidth: 700 }} aria-label="spanning table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">Generating station</TableCell>
-              <TableCell align="center">Cost Function (Rs./h)</TableCell>
-              <TableCell align="center">Pmin (MW)</TableCell>
-              <TableCell align="center">Pmax (MW)</TableCell>
-              <TableCell align="center">Power Generated (MW)</TableCell>
-              <TableCell align="center">Incremental Cost (Rs./h/MW)</TableCell>
-              <TableCell align="center">Cost (Rs./h)</TableCell>
+              <TableCell align="center"><strong>Generating station</strong></TableCell>
+              <TableCell align="center"><strong>Cost Function (Rs./h)</strong></TableCell>
+              <TableCell align="center"><strong>Pmin (MW)</strong></TableCell>
+              <TableCell align="center"><strong>Pmax (MW)</strong></TableCell>
+              <TableCell align="center"><strong>Power Generated (MW)</strong></TableCell>
+              <TableCell align="center"><strong>Incremental Cost (Rs./h/MW)</strong></TableCell>
+              <TableCell align="center"><strong>Cost (Rs./h)</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -62,8 +62,8 @@ export default function Output(props) {
               </TableRow>
             ))}
             <TableRow>
-              <TableCell colSpan={2}>Total Cost (RS.)</TableCell>
-              <TableCell align="center">{Total_Cost.toFixed(2)}</TableCell>
+              <TableCell colSpan={6} align="center"><strong>Total Cost (RS.)</strong></TableCell>
+              <TableCell align="center"><strong>{Total_Cost.toFixed(2)}</strong></TableCell>
             </TableRow>
           </TableBody>
         </Table>

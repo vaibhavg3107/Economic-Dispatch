@@ -28,10 +28,10 @@ export default function Navbar() {
         </MenuItem>
         <MenuItem>
           {" "}
-          <Link to="team" smooth={true} spy={true} duration={200}>
+          {/* <Link to="team" smooth={true} spy={true} duration={200}>
             {" "}
-            <Typography variant="h6">Team</Typography>{" "}
-          </Link>
+           <Typography variant="h6">Team</Typography>{" "}
+          </Link> */}
         </MenuItem>
       </Toolbar>
     </AppBar>

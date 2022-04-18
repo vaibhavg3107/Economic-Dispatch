@@ -3,11 +3,15 @@ import GeneratingStationData from "./GeneratingStationData";
 import Button from "@mui/material/Button";
 import Output from "./Output";
 import { useState } from "react";
-import { FormControlLabel, Switch, Typography } from "@mui/material";
+import { DialogActions, DialogContentText, FormControlLabel, Switch, Typography } from "@mui/material";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import excelFunction from "../services/importExcel";
+import { Dialog, DialogTitle } from "@mui/material"
+import { DialogContent } from "@material-ui/core";
 let Data = { a: [], b: [], c: [], pmax: [], pmin: [] };
+let pseudoData={};
+let matrixData={};
 var excelData = [];
 
 export default function WithoutLosses() {
@@ -23,12 +27,18 @@ export default function WithoutLosses() {
   const [outputDisplay, setOutputDisplay] = useState(false);
   const [calculateButton, setCalculateButton] = useState(false);
   const [isExcelData, setIsExcelData] = useState(false);
+  const [toConsiderLoss,setToConsiderLoss]=useState(false); 
+  const [isValidData,setIsValidData]=useState(true);
+  const [dialogContent,setDialogContent]=useState("");
 
   function convertExcelData(File) {
     excelFunction(File)
-      .then((d) => {
+      .then((Data) => {
+        const d=Data.data;
+        const matrix=Data.mat_data;
         console.log(d);
         var sz = d.length;
+
 
         Data = { a: [], b: [], c: [], pmax: [], pmin: [] };
 
@@ -42,19 +52,30 @@ export default function WithoutLosses() {
         }
 
         excelData = d;
-
+        matrixData=matrix;
+        console.log(Data)
         //setN(sz);
         //setPd(d[0].pd);
 
         // calculateWithoutLosses();
         setN(excelData.length);
         setPd(excelData[0].pd);
+        console.log(d)
+        console.log(Data);
+      
+        pseudoData=Data;
       })
       .catch((e) => {
         console.log(e);
       });
   }
   function calculateWithoutLosses() {
+    
+    //console.log(pseudoData)
+    //console.log(Data);
+    if (isExcelData)
+    Data=pseudoData;
+    console.log(matrixData)
     const payload = {
       n: n,
       a: Data["a"],
@@ -65,8 +86,62 @@ export default function WithoutLosses() {
       PD: Pd,
     };
 
-    axios
-      .post("/api", payload)
+
+    
+
+
+
+    if (toConsiderLoss)
+    {
+
+      var inputMatrix=[];
+      for (var i=0;i<n;i++)
+    { 
+
+
+      var tempA=[];
+     
+        
+      console.log(typeof(matrixData[i].c1));  
+      tempA=Object.values(matrixData[i]);
+       console.log(tempA)
+    
+       inputMatrix.push(tempA);
+    }
+    payload.B=inputMatrix
+    
+  }
+    console.log(payload)
+
+    //checking conditions
+    var pminSum=0,pmaxSum=0;
+
+    for (var i=0;i<n;i++)
+    {
+      //console.log(Data["pmin"][i])
+      pminSum+=Data["pmin"][i];
+      pmaxSum+=Data["pmax"][i];
+    }
+  
+    //console.log(pminSum)
+    //console.log(pmaxSum)
+    if (pminSum>Pd)
+    {setIsValidData(false)
+      setDialogContent("Please ensure that total demand is greater than the summation of minimum power generated from all stations")
+  }
+    else if (pmaxSum<Pd)
+    {setIsValidData(false)
+     setDialogContent("Please ensure that total demand is less than the summation of maximum power generated from all stations")
+    }
+
+    
+ //   (toConsiderLoss)?payload.B=matrixData:null;
+
+   // var url=(toConsiderLoss)?'api/loss':'api';
+   var url=(!toConsiderLoss)?"api":"api/loss"; 
+   console.log(url);
+   axios
+      .post(url, payload)
       .then((resp) => {
         console.log(resp.data);
         setOutputData(resp.data);
@@ -74,6 +149,9 @@ export default function WithoutLosses() {
       })
       .catch((e) => console.log(e));
   }
+
+
+
 
   function handleChangeN(event) {
     setN(parseInt(event.target.value));
@@ -112,6 +190,7 @@ export default function WithoutLosses() {
   }
 
   function handleClickData() {
+     console.log(Data)
     calculateWithoutLosses();
   }
 
@@ -120,8 +199,49 @@ export default function WithoutLosses() {
   }
 
   return (
-    <div id="calculate" className="text-center">
+   <div id="calculate" className="text-center">
       <h1> Calculations</h1>
+       <Dialog
+    open={!isValidData}
+    onClose={()=>{setIsValidData(true)}}
+    keepMounted
+    aria-describedby="alert-dialog-slide-description"
+   >
+ <DialogTitle>Invalid Input Data!</DialogTitle>
+ <DialogContent>
+
+
+ <DialogContentText id="alert-dialog-slide-description">{dialogContent}</DialogContentText>
+ </DialogContent>
+ <DialogActions> 
+<Button onClick={()=>{setIsValidData(true)}}>Ok</Button>
+
+ </DialogActions>
+   </Dialog>
+      <FormControlLabel
+        value="switch"
+        label="Do you want to consider transmission losses?"
+        
+        control={
+
+          <Switch
+           onChange={(event)=>{
+
+            setToConsiderLoss(event.target.checked);
+            
+            setIsExcelData(event.target.checked);
+            console.log(toConsiderLoss);
+           }}
+           >
+    
+
+          </Switch>
+        }
+
+>
+
+      </FormControlLabel> 
+   
       <div
         className="card"
         style={{
@@ -132,6 +252,8 @@ export default function WithoutLosses() {
           padding: "18px 20px",
         }}
       >
+
+        {(!toConsiderLoss)?
         <FormControlLabel
           value="switch"
           label="Input data from excel"
@@ -146,7 +268,7 @@ export default function WithoutLosses() {
               }}
             ></Switch>
           }
-        ></FormControlLabel>
+        ></FormControlLabel>:null}
 
         {!isExcelData ? (
           <form>
@@ -212,7 +334,7 @@ export default function WithoutLosses() {
           Calculate
         </Button>
       )}
-      {outputDisplay && <Output result={outputData} data={Data} />}
+      {outputDisplay && <Output result={outputData} data={Data} loss={toConsiderLoss}/>}
     </div>
   );
 }

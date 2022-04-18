@@ -12,6 +12,7 @@ export default function Output(props) {
   let P = JSON.parse(props.result.P);
   let C = JSON.parse(props.result.C);
   var Total_Cost = parseFloat(props.result.Total_Cost);
+  var PL = parseFloat(props.result.PL);
   const data = props.data;
   
   const rows = [];
@@ -61,6 +62,10 @@ export default function Output(props) {
                 <TableCell align="center">{row.cost.toFixed(2)}</TableCell>
               </TableRow>
             ))}
+            {props.loss && <TableRow>
+              <TableCell colSpan={6} align="center"><strong>Transmission Loss (MW)</strong></TableCell>
+              <TableCell align="center"><strong>{PL.toFixed(2)}</strong></TableCell>
+            </TableRow>}
             <TableRow>
               <TableCell colSpan={6} align="center"><strong>Total Cost (RS./h)</strong></TableCell>
               <TableCell align="center"><strong>{Total_Cost.toFixed(2)}</strong></TableCell>
